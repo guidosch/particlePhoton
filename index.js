@@ -1,8 +1,9 @@
 var Particle = require('particle-api-js');
 var particle = new Particle();
 var token;
+var password;
 
-particle.login({username: 'guido.schnider@gmail.com', password: 'INl16ajcBpkb'}).then(
+particle.login({username: 'guido.schnider@gmail.com', password: password}).then(
   function(data) {
     token = data.body.access_token;
 
