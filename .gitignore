@@ -1,0 +1,8 @@
+/tmp
+
+node_modules/
+.npm
+.DS_Store
+Thumbs.db
+*.log
+.settings/
