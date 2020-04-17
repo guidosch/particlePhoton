@@ -1,175 +1,61 @@
 <!DOCTYPE html>
 
 <head>
+    <title data-text="title">Roller automation</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particle-api-js@8/dist/particle.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="js.cookie.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/de.js"></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Roller automation</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" src="index.js"></script>
 
-
-        var token;
-        var deviceId = '3b003a001147363335343834';
-        var particle = new Particle();
-        var password;
-
-        function moveRollers(command) {
-            var fnPr = particle.callFunction({ deviceId: deviceId, name: 'moveRollers', argument: command, auth: token });
-
-            fnPr.then(
-                function (data) {
-                    $(".button").each(function (index) {
-                        $(this).removeClass("is-loading");
-                    });
-                    console.log('Function called successfully:', data);
-                    fetchValues();
-                }, function (err) {
-                    console.log('An error occurred:', err);
-                    showNotification("Error calling function 'moveRollers'.");
-                });
-        }
-
-        function getVar(varName) {
-            particle.getVariable({ deviceId: deviceId, name: varName, auth: token }).then(function (data) {
-                console.log('Device variable retrieved successfully:', data);
-                try {
-                    if (data.statusCode == 200) {
-                        formatData(varName, data);
-                    }
-
-                } catch (error) {
-                    console.log('An error occurred while parsing response data:', error);
-                    showNotification('An error occurred while parsing response data.');
-                }
-            }, function (err) {
-                console.log('Device variable cloud not be loaded:', err);
-                showNotification('Device variable cloud not be loaded.');
-            });
-        }
-
-
-        function formatData(varName, data) {
-            let connected = data.body.coreInfo.connected;
-            let connected_style = connected ? "green" : "red";
-            let connected_label = connected ? "Online" : "Offline";
-            let last_heard = data.body.coreInfo.last_heard;
-            let last_heard_formatted = moment(last_heard).format("LLL");
-            $("#connected").html(`<span style='color:${connected_style}'>${connected_label}</span>: Zuletzt gesehen um ${last_heard_formatted}`);
-            let value = data.body.result;
-            if (typeof value === "boolean") {
-                let natural = value ? "ja" : "nein";
-                $("#" + varName).text(natural);
-            } else if (typeof value === "number") {
-                if (!Number.isInteger(value)) {
-                    $("#" + varName).text(value.toFixed(1));
-                } else {
-                    $("#" + varName).text(value);
-                }
-            }
-        }
-
-        function showNotification(text) {
-            $("#notification_text").text(text);
-            $("#notification_text").parent().show();
-        }
-
-        function fetchValues() {
-            getVar("roomTemperature");
-            getVar("humidity");
-            getVar("rollersDown");
-            getVar("sunshine");
-        }
-
-        function doLogin() {
-            particle.login({ username: 'guido.schnider@gmail.com', password: password }).then(
-                function (data) {
-                    console.log('API call completed on promise resolve: ', data.body.access_token);
-                    token = data.body.access_token;
-                    fetchValues();
-                },
-                function (err) {
-                    console.log('Cloud not login to API: ', err);
-                    showNotification();
-                }
-            );
-        }
-
-        $(document).ready(function () {
-
-            $("#close").click(function () {
-                $(this).addClass("is-loading");
-                moveRollers("close");
-            });
-            $("#open").click(function () {
-                $(this).addClass("is-loading");
-                moveRollers("open");
-            });
-            $(".notification .delete").click(function () {
-                $(this).parent().hide();
-            });
-
-            if (!Cookies.get('password') && !password) {
-                $("#login").show();
-            }
-
-            if (Cookies.get('password')) {
-                password = Cookies.get('password');
-                doLogin();
-            }
-
-            $("#doLogin").click(function () {
-                password = $("#password").val().trim();
-                Cookies.set('password', password, { expires: 365, path: '' });
-                $("#login").hide();
-                doLogin();
-            });
-
-            setInterval(fetchValues, (5 * 60 * 1000));
-
-        });
-
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
 </head>
 
 <body>
 
     <section class="section">
         <div id="login" class="box" style="display: none;">
-            <div >Password: <input style="padding-right: 1em;" type="text" name="password"
-                    id="password">
+            <div>Password: <input style="padding-right: 1em;" type="text" name="password" id="password">
                 <button class="button" id="doLogin">Login</button>
             </div>
         </div>
         <div class="container">
-            <h1 class="title">
-                Rollers down/up
-            </h1>
+            <h1 data-text="document-title" class="title">Rollers down/up</h1>
             <div class="columns">
-                <div class="column"><button class="button is-large is-primary" id="close">down</button></div>
-                <div class="column"><button class="button is-large is-primary" id="open">&nbsp;up&nbsp;</button></div>
+                <div class="column">
+                    <button data-text="button-close" class="button is-large is-primary" id="close">down</button>
+                </div>
+                <div class="column">
+                    <button data-text="button-open" class="button is-large is-primary" id="open">up</button>
+                </div>
             </div>
             <table class="table is-narrow">
                 <tr>
-                    <td>Raumtemperatur</td>
-                    <td><span id="roomTemperature"></span><span>&nbsp;°C</span></td>
+                    <td>Temperatur innen/aussen</td>
+                    <td><span id="roomtemperature"></span><span>&nbsp;°C</span>&nbsp;/&nbsp;<span
+                            id="outsidetemperature"></span><span>&nbsp;°C</span></td>
                 </tr>
                 <tr>
-                    <td>Luftfeuchtigkeit</td>
-                    <td><span id="humidity"></span><span>&nbsp;%</span></td>
+                    <td>Luftfeuchtigkeit innen/aussen</td>
+                    <td><span id="humidity"></span><span>&nbsp;%</span>&nbsp;/&nbsp;<span
+                            id="outsidehumidity"></span><span>&nbsp;%</span></td>
                 </tr>
                 <tr>
                     <td>Sonnenschein</td>
                     <td><span id="sunshine"></span><span>&nbsp;Minuten pro 10 min</span></td>
                 </tr>
                 <tr>
-                    <td>Rollers unten?</td>
+                    <td>Windböhen</td>
+                    <td><span id="gustPeak"></span><span>&nbsp;km/h</span></td>
+                </tr>
+                <tr>
+                    <td data-text="status-relays">Rollers unten?</td>
                     <td><span id="rollersDown"></span></td>
                 </tr>
                 <tr>
@@ -178,14 +64,17 @@
                 </tr>
             </table>
         </div>
+
+        <div id="notification" class="notification is-warning" style="display: none;">
+            <button class="delete"></button>
+            <p id="notification_text"></p>
+        </div>
+        <section class="section">
+                <span class="icon has-text-info">
+                    <a target="blank" href="https://github.com/guidosch/particlePhoton"><i class="fas fa-info-circle"></i></a>
+                </span>
+        </section>
     </section>
-
-    <div id="notification" class="notification is-warning" style="display: none;">
-        <button class="delete"></button>
-        <p id="notification_text"></p>
-    </div>
-
-
 </body>
 
 </html>
