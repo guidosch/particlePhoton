@@ -45,7 +45,7 @@ function getVar(varName) {
       }
 
     } catch (error) {
-      showNotification('An error occurred while parsing response data:'+error);
+      showNotification('An error occurred while parsing response data: '+error);
     }
   }, function (err) {
     showNotification('Device variables cloud not be loaded: '+err);
@@ -65,13 +65,12 @@ function formatData(varName, data) {
       $("#" + varName).text(value);
     }
   }
-  formatLastConnectionTime(data.body.coreInfo.connected);
+  formatLastConnectionTime(data.body.coreInfo.connected, data.body.coreInfo.last_heard);
 }
 
-function formatLastConnectionTime(connected) {
+function formatLastConnectionTime(connected, last_heard) {
   let connected_style = connected ? "green" : "red";
   let connected_label = connected ? "Online" : "Offline";
-  let last_heard = data.body.coreInfo.last_heard;
   let last_heard_formatted = moment(last_heard).format("LLL");
   $("#connected").html(`<span style='color:${connected_style}'>${connected_label}</span>: Zuletzt gesehen um ${last_heard_formatted}`);
   
@@ -87,6 +86,8 @@ function fetchValues() {
   getVar("roomtemperature");
   getVar("outsidetemperature");
   getVar("humidity");
+  getVar("sunshine");
+  getVar("rollersDown");
   getVar("outsidehumidity");
   getVar("precipitation");
   getVar("gustPeak");

@@ -4,15 +4,17 @@
     <title data-text="title">Roller automation</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="64x64" href="smart-home-64x.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="smart-home-180x.png">
     <meta charset="utf-8">
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particle-api-js@8/dist/particle.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="js.cookie.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/de.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="js.cookie.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
 </head>
@@ -21,7 +23,7 @@
 
     <section class="section">
         <div id="login" class="box" style="display: none;">
-            <div>Password: <input style="padding-right: 1em;" type="text" name="password" id="password">
+            <div>Password: <input style="padding-right: 1em;" type="password" name="password" id="password">
                 <button class="button" id="doLogin">Login</button>
             </div>
         </div>
@@ -69,11 +71,9 @@
             <button class="delete"></button>
             <p id="notification_text"></p>
         </div>
-        <section class="section">
-                <span class="icon has-text-info">
-                    <a target="blank" href="https://github.com/guidosch/particlePhoton"><i class="fas fa-info-circle"></i></a>
-                </span>
-        </section>
+        <span style="margin: 1em;" class="icon has-text-info">
+            <a target="blank" href="https://github.com/guidosch/particlePhoton"><i class="fas fa-info-circle"></i></a>
+        </span>
     </section>
 </body>
 

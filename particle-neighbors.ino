@@ -53,9 +53,9 @@ void setup() {
 	Particle.subscribe("meteodata", subscribeHandler, ALL_DEVICES);
 	Particle.function("callShellysOpenClose", callShellysOpenClose);
 	
-    Particle.variable("rollersDown", rollersDown);
     Particle.variable("roomtemperature", roomTemperature);
     Particle.variable("humidity", humidity);
+    Particle.variable("rollersDown", rollersDown);
     Particle.variable("sunshine", sunshine);
     Particle.variable("outsidehumidity", outsideHumidity);
     Particle.variable("gustPeak", gustPeak);
@@ -128,7 +128,7 @@ int callShellysOpenClose(String command) {
     }
     if (errors < 2) {
         return 1;
-    } 
+    }
 }
 
 bool doRequest(String command) {
