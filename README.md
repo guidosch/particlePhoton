@@ -1,6 +1,6 @@
 # particlePhoton
 
-Small smarthome project for my office and also a neighbour. Control windows or rollers motors with shelly.cloud WLAN relays over a Particle.io Photon device. The photon has tracks room temp and receivces meteo data over its API.
+Small smarthome project for my office and also a neighbor. Controls windows or rollers motors with shelly.cloud WLAN relays over a Particle.io Photon device. The photon tracks room temperature with a DHT22 sensor itself and receives meteo data over its API.
 
 Particle.io Photon Device: https://docs.particle.io/photon/
 

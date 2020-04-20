@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<head>
+    <title data-text="title">Roller automation</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particle-api-js@8/dist/particle.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/de.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="js.cookie.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+
+    <script type="text/javascript" >
+        var token = {{token}};
+    </script>
+
+</head>
+
+<body>
+
+    <section class="section">
+        <div id="login" class="box" style="display: none;">
+            <div>Password: <input style="padding-right: 1em;" type="text" name="password" id="password">
+                <button class="button" id="doLogin">Login</button>
+            </div>
+        </div>
+        <div class="container">
+            <h1 data-text="document-title" class="title">Rollers down/up</h1>
+            <div class="columns">
+                <div class="column">
+                    <button data-text="button-close" class="button is-large is-primary" id="close">down</button>
+                </div>
+                <div class="column">
+                    <button data-text="button-open" class="button is-large is-primary" id="open">up</button>
+                </div>
+            </div>
+            <table class="table is-narrow">
+                <tr>
+                    <td>Temperatur innen/aussen</td>
+                    <td><span id="roomtemperature"></span><span>&nbsp;°C</span>&nbsp;/&nbsp;<span
+                            id="outsidetemperature"></span><span>&nbsp;°C</span></td>
+                </tr>
+                <tr>
+                    <td>Luftfeuchtigkeit innen/aussen</td>
+                    <td><span id="humidity"></span><span>&nbsp;%</span>&nbsp;/&nbsp;<span
+                            id="outsidehumidity"></span><span>&nbsp;%</span></td>
+                </tr>
+                <tr>
+                    <td>Sonnenschein</td>
+                    <td><span id="sunshine"></span><span>&nbsp;Minuten pro 10 min</span></td>
+                </tr>
+                <tr>
+                    <td>Windböhen</td>
+                    <td><span id="gustPeak"></span><span>&nbsp;km/h</span></td>
+                </tr>
+                <tr>
+                    <td data-text="status-relays">Rollers unten?</td>
+                    <td><span id="rollersDown"></span></td>
+                </tr>
+                <tr>
+                    <td>Verbindungsstatus</td>
+                    <td><span id="connected"></span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="notification" class="notification is-warning" style="display: none;">
+            <button class="delete"></button>
+            <p id="notification_text"></p>
+        </div>
+        <section class="section">
+                <span class="icon has-text-info">
+                    <a target="blank" href="https://github.com/guidosch/particlePhoton"><i class="fas fa-info-circle"></i></a>
+                </span>
+        </section>
+    </section>
+</body>
+
+</html>

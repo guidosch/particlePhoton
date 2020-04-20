@@ -1,25 +1,25 @@
 var token;
-//var deviceId = '3b003a001147363335343834'; //neighbors
-var deviceId = '270039001447363336383438'; //b14-2-21
+var deviceId = '3b003a001147363335343834'; //neighbors
+//var deviceId = '270039001447363336383438'; //b14-2-21
 
 var particle = new Particle();
 var username = "guido.schnider@gmail.com";
 var password;
 var labelMap = new Map();
 
-/** 
 labelMap.set("title","Roller automation");
 labelMap.set("document-title","Rollers down/up");
 labelMap.set("button-open","up");
 labelMap.set("button-close","down");
 labelMap.set("status-relays","Rollers down?");
-*/
 
+/** 
 labelMap.set("title","Fenster automation");
 labelMap.set("document-title","Fenster open/close");
 labelMap.set("button-open","open");
 labelMap.set("button-close","close");
 labelMap.set("status-relays","Fenster offen?");
+*/
 
 function moveRollers(command) {
   var fnPr = particle.callFunction({ deviceId: deviceId, name: 'callShellysOpenClose);', argument: command, auth: token });

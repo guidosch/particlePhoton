@@ -9,9 +9,9 @@
 #define THIRTY_MINUTES_MILLIS (30 * 60 * 1000)
 #define TOO_HOT 27
 
-//BB9-4D1 --> 192.168.110.245
-//-> 192.168.109.198
-uint8_t shellyIPsDevicePart[] = { 245, 246 };
+//98:f4:ab:b9:4d:14 --> 192.168.108.112 (shelly-b14-1)
+//dc:4f:22:76:ce:6c --> 192.168.108.113 (shelly-b14-2)
+uint8_t shellyIPsDevicePart[] = { 112, 113 };
 
 unsigned long lastTimeSync = millis();
 unsigned long lastTempRead = millis();
