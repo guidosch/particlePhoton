@@ -7,10 +7,11 @@
 #define ONE_DAY_MILLIS (24 * 60 * 60 * 1000)
 #define FOUR_HOURS_MILLIS (4* 60 * 60 * 1000)
 #define THIRTY_MINUTES_MILLIS (30 * 60 * 1000)
-#define TOO_HOT 27
+#define TOO_HOT 26
 
 //98:f4:ab:b9:4d:14 --> 192.168.108.112 (shelly-b14-1)
 //dc:4f:22:76:ce:6c --> 192.168.108.113 (shelly-b14-2)
+//IMPORTANT - CHECK IP Part 192.168.xx below in callShellysOpenClose!
 uint8_t shellyIPsDevicePart[] = { 112, 113 };
 
 unsigned long lastTimeSync = millis();
@@ -109,7 +110,7 @@ int callShellysOpenClose(String command) {
     {
         if (errors < 2) {
             IPAddress();
-            IPAddress shellyIP(192, 168, 110, shellyIPsDevicePart[i]);
+            IPAddress shellyIP(192, 168, 108, shellyIPsDevicePart[i]);
             Serial.print("Calling shelly with IP: ");
             String ipStr = String(shellyIP[0])+"."+String(shellyIP[1])+"."+String(shellyIP[2])+"."+String(shellyIP[3]);
             Serial.println(ipStr);

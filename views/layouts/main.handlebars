@@ -18,8 +18,13 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
 
-    <script type="text/javascript" >
-        var token = {{token}};
+    <script type="text/javascript">
+        var token = "{{token}}";
+        $(document).ready(function () {
+            if (token) {
+                fetchValues();
+            }
+        });
     </script>
 
 </head>
@@ -63,7 +68,7 @@
                 </tr>
                 <tr>
                     <td data-text="status-relays">Rollers unten?</td>
-                    <td><span id="rollersDown"></span></td>
+                    <td><span id="windowOpen"></span></td>
                 </tr>
                 <tr>
                     <td>Verbindungsstatus</td>

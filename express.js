@@ -14,9 +14,9 @@ var token;
 
 doLogin();
 
-app.get('/', function (req, res) {
+app.get('/windows', function (req, res) {
   res.locals.token = token;
-  res.render('home');
+  res.render('main');
 });
 
 app.route('/B14-2-21').get(function(req,res)
@@ -24,7 +24,7 @@ app.route('/B14-2-21').get(function(req,res)
     res.send("Content for B14...");
 });
 
-app.listen(3000);
+app.listen(8080);
 
 
 function doLogin() {
