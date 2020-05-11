@@ -9,7 +9,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static('public'));
 
 var username = "guido.schnider@gmail.com";
-var password = "";
+var password = "pk(dxE8iG3k6Vnx[GzrpiK";
 var token;
 
 doLogin();
