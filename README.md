@@ -4,7 +4,7 @@ Small smarthome project for my office and also a neighbor. Controls windows or r
 
 Start: Serve index.html from the public folder for a static only usecase or run the express.js app [host:8080/windows] if you do not want do bother users with username/password on client side.
 
-Particle.io Photon Device: https://docs.particle.io/photon/
+Particle.io Photon Device: https://docs.particle.io/photon/ (works fine with dynamic IP address as long as it is part of the same WLAN. It only has to know the fixed IP of the shellys)
 
 Shelly Devices:https://shelly.cloud/shelly-25-wifi-smart-relay-roller-shutter-home-automation/
 
