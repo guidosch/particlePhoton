@@ -32,20 +32,32 @@
 <body>
 
     <section class="section">
-        <div id="login" class="box" style="display: none;">
-            <div>Password: <input style="padding-right: 1em;" type="password" name="password" id="password">
-                <button class="button" id="doLogin">Login</button>
+
+        <div class="container">
+            <div class="columns">
+                <div id="login" class="column box is-half" style="display: none;">
+                    <div>Password: <input style="padding-right: 1em;" type="password" name="password" id="password">
+                        <button class="button" id="doLogin">Login</button>
+                    </div>
+                </div>
+                <div id="roomSelector" class=" column box" style="display: none;">
+                    <div class="select is-multiple">
+                        <select id="roomSelect" multiple size="3">
+                            <option value="B14_2_21">B14-2.21 (SL Team)</option>
+                            <option value="B14_2_25">B14-2.25</option>
+                            <option value="B14_2_26">B14-2.26</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="container">
-            <h1 data-text="document-title" class="title">Rollers down/up</h1>
-            <div class="columns">
-                <div class="column">
-                    <button data-text="button-close" class="button is-large is-primary" id="close">down</button>
-                </div>
-                <div class="column">
-                    <button data-text="button-open" class="button is-large is-primary" id="open">up</button>
-                </div>
+            <h1 data-text="document-title" id="document-title" class="title" style="margin-top: 1em;">Rollers down/up</h1>
+
+            <div class="column" style="max-width: 650px;">
+                <button data-text="button-close" class="button is-large is-primary" id="close">down</button>
+                <button data-text="button-open" class="button is-large is-primary" style="float:right;"
+                    id="open">up</button>
             </div>
             <table class="table is-narrow">
                 <tr>
@@ -74,16 +86,26 @@
                     <td>Verbindungsstatus</td>
                     <td><span id="connected"></span></td>
                 </tr>
-            </table>
-        </div>
+                <tr>
+                    <td>
+                        <span class="icon has-text-info" style="margin-top: 1em;">
+                            <a target="blank" href="https://github.com/guidosch/particlePhoton"><i
+                                    class="fas fa-info-circle"></i></a>
+                        </span>
 
-        <div id="notification" class="notification is-warning" style="display: none;">
-            <button class="delete"></button>
-            <p id="notification_text"></p>
+                    </td>
+                    <td><span></span></td>
+                </tr>
+            </table>
+            <div class="columns">
+                <div id="notification" class="column notification is-warning is-half"
+                    style="display: none;">
+                    <button class="delete"></button>
+                    <p id="notification_text"></p>
+                </div>
+            </div>
         </div>
-        <span style="margin: 1em;" class="icon has-text-info">
-            <a target="blank" href="https://github.com/guidosch/particlePhoton"><i class="fas fa-info-circle"></i></a>
-        </span>
+        </div>
     </section>
 </body>
 

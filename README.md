@@ -8,4 +8,4 @@ Particle.io Photon Device: https://docs.particle.io/photon/ (works fine with dyn
 
 Shelly Devices:https://shelly.cloud/shelly-25-wifi-smart-relay-roller-shutter-home-automation/
 
-Meteo Data for Switzerland: https://github.com/marcelstoer/open-data-smn is sent as json to the particle cloud (Particle.publish) and for my setup runs on a raspberry PI. All particle devices that belong to a certain user can subscribe to events like the meteodata above and the particle cloud will send those events immediatly.
+Meteo Data for Switzerland: https://github.com/marcelstoer/open-data-smn is sent as json to the particle cloud (Particle.publish) and for my setup runs on a raspberry PI. All particle devices that belong to a certain user can subscribe to events like the meteodata above and the particle cloud will send those events immediatly to all devices.

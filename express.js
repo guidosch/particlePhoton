@@ -8,6 +8,7 @@ app.engine('handlebars', handlebars());
 app.set('view engine', 'handlebars');
 app.use(express.static('public'));
 
+//particle account credentials - do not checkin!
 var username = "guido.schnider@gmail.com";
 var password = "";
 var token;
@@ -17,11 +18,6 @@ doLogin();
 app.get('/windows', function (req, res) {
   res.locals.token = token;
   res.render('main');
-});
-
-app.route('/B14-2-21').get(function(req,res)
-{
-    res.send("Content for B14...");
 });
 
 app.listen(8080);

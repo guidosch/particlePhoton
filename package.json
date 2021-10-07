@@ -1,6 +1,6 @@
 {
   "name": "particle",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Control particle photon devices over JS API",
   "main": "index.js",
   "scripts": {
@@ -14,12 +14,12 @@
   "author": "Guido Schnider",
   "license": "ISC",
   "dependencies": {
-    "bulma": "^0.8.2",
+    "bulma": "^0.9.3",
     "express": "^4.17.1",
-    "express-handlebars": "^4.0.3",
-    "http-server": "^0.12.1",
-    "js-cookie": "^2.2.1",
-    "moment": "^2.24.0",
-    "particle-api-js": "^8.3.0"
+    "express-handlebars": "^5.3.4",
+    "http-server": "^13.0.2",
+    "js-cookie": "^3.0.1",
+    "moment": "^2.29.1",
+    "particle-api-js": "^9.1.0"
   }
 }

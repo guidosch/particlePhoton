@@ -1,11 +1,20 @@
 var token;
-//var deviceId = '3b003a001147363335343834'; //neighbors
-var deviceId = '270039001447363336383438'; //b14-2-21
+//var deviceId = '3b003a001147363335343834'; //neighbor Marcel
+var deviceId;
 
 var particle = new Particle();
+
+//only used in index.html static version
 var username = "guido.schnider@gmail.com";
 var password;
+
+var selectedRoom;
 var labelMap = new Map();
+
+var deviceMap = new Map();
+deviceMap.set("B14_2_21","270039001447363336383438");
+deviceMap.set("B14_2_25","3e0038000e47363336383437");
+deviceMap.set("B14_2_26","340038001247363336383437");
 
 /** 
 labelMap.set("title","Roller automation");
@@ -82,7 +91,28 @@ function showNotification(text) {
   console.log(text);
 }
 
+function hideNotification() {
+  $("#notification_text").parent().hide();
+}
+
+function getRoomName(roomId) {
+  var roomName ="";
+  $( "#roomSelect option" ).each(function() {
+    if ($(this).val() === roomId){
+      roomName = $(this).text();
+    }
+  });
+  console.log("test: "+roomName);
+  return roomName;
+}
+
 function fetchValues() {
+  if (!deviceId){
+    showNotification('Choose room to fetch current measurements and enable actions.');
+    return;
+  } else{
+    hideNotification();
+  }
   getVar("roomtemperature");
   getVar("outsidetemperature");
   getVar("humidity");
@@ -122,15 +152,41 @@ $(document).ready(function () {
     $(this).parent().hide();
   });
 
+  //only used in express.js multiroom context
+  if (Cookies.get('room') && !selectedRoom ) {
+    selectedRoom = Cookies.get('room');
+    deviceId = deviceMap.get(selectedRoom);
+    labelMap.set('document-title', getRoomName(selectedRoom)+": Fenster open/close");
+  }
+  
+  //only used in express.js multiroom context
+  if (!Cookies.get('room') && !selectedRoom) {
+    $("#roomSelector").show();
+  }
+  //only used in express.js multiroom context
+  $("#roomSelect").change(function (event) {
+    $( "#roomSelect option:selected" ).each(function() {
+      selectedRoom = $( this ).val();
+    });
+    Cookies.set('room', selectedRoom, { expires: 365, path: '' });
+    deviceId = deviceMap.get(selectedRoom);
+    labelMap.set('document-title', getRoomName(selectedRoom)+": Fenster open/close");
+    $("#roomSelector").hide();
+    hideNotification();
+    fetchValues();
+  });
+
   if (!Cookies.get('password') && !password && !token) {
     $("#login").show();
   }
-
+  
+  //only used in static index.html version
   if (Cookies.get('password') && !token ) {
     password = Cookies.get('password');
     doLogin();
   }
-
+  
+  //only used in static index.html version
   $("#doLogin").click(function () {
     password = $("#password").val().trim();
     Cookies.set('password', password, { expires: 365, path: '' });
@@ -138,11 +194,13 @@ $(document).ready(function () {
     doLogin();
   });
 
+  //update data table
   $("*[data-text]").each(function (index) {
     let attrName = $(this).attr("data-text");
     $(this).text(labelMap.get(attrName));
   });
 
+  //refresh values every 5 minutes
   setInterval(fetchValues, (5 * 60 * 1000));
 
 });
