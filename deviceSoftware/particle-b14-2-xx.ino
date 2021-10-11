@@ -1,17 +1,25 @@
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
+
 #include <JsonParserGeneratorRK.h>
-#include <Adafruit_DHT_Particle.h>
 #include "HttpClient.h"
 
-#define DHTPIN D7     // what pin we're connected to
-#define DHTTYPE DHT22		// DHT 11 or 22
+#define DHTPIN 7     // what pin we're connected to
+#define DHTTYPE DHT22
 #define ONE_DAY_MILLIS (24 * 60 * 60 * 1000)
 #define FOUR_HOURS_MILLIS (4* 60 * 60 * 1000)
-#define THIRTY_MINUTES_MILLIS (30 * 60 * 1000)
-#define TOO_HOT 26
+#define THIRTY_MINUTES_MILLIS (1 * 60 * 1000)
+#define TOO_HOT 24
+#define SW_VERSION 1
 
+//Ergon Photon devices
 //98:f4:ab:b9:4d:14 --> 192.168.108.112 (shelly-b14-1)
 //dc:4f:22:76:ce:6c --> 192.168.108.113 (shelly-b14-2)
-//IMPORTANT - CHECK IP Part 192.168.xx below in callShellysOpenClose!
+//3c:61:05:e5:14:69 ---> hostname:shelly-b14-3 192.168.108.114 --> B14-2.26
+//8c:aa:b5:5d:7f:a1 ---> hostname:shelly-b14-4 192.168.108.115 -->  B14-2.25
+//IMPORTANT - CHECK IP Part 192.168.xx below!
+
 uint8_t shellyIPsDevicePart[] = { 112, 113 };
 
 unsigned long lastTimeSync = millis();
@@ -42,12 +50,12 @@ http_header_t headers[] = {
 HttpClient http;
 http_request_t request;
 http_response_t response;
-DHT dht(DHTPIN, DHTTYPE);
+DHT_Unified dht(DHTPIN, DHTTYPE);
 JsonParser parser;
 
 void setup() {
-	Serial.begin(9600); 
 	dht.begin();
+	Serial.begin(9600); 
 	Particle.subscribe("meteodata", subscribeHandler, ALL_DEVICES);
 	Particle.function("callShellysOpenClose", callShellysOpenClose);
 	
@@ -59,8 +67,9 @@ void setup() {
     Particle.variable("gustPeak", gustPeak);
     Particle.variable("precipitation", precipitation);
     Particle.variable("outsidetemperature", outsideTemperature);
+    Particle.variable("sw_version", SW_VERSION);
 
-    delay(1000);
+    delay(2000);
     readMeasurements();
 }
 
@@ -69,23 +78,32 @@ void loop() {
         readMeasurements();
     }
 	
-    //enable relais if humidity higher than 55% and run at least for four hours
+    //enable relais
     if (isTooHotAndSummer()) {
         callShellysOpenClose("open");
     }
     
     //close if getting cold
-    if (windowOpen && roomTemperature < 20) {
+    if (windowOpen && roomTemperature < 21) {
         callShellysOpenClose("close");
     }
+    
+    //close if too hot outside
+    if (windowOpen && outsideTemperature > roomTemperature) {
+        callShellysOpenClose("close");
+    }
+    
+    //close if wind gusts are too high
+    //TODO
+    
 	syncTimeWithCloud();
 	delay(THIRTY_MINUTES_MILLIS);
 }
 
 bool isTooHotAndSummer() {
-    //auto cooling between May and September
-    if (Time.month() >= 5 && Time.month() < 10) {
-        if (roomTemperature > TOO_HOT && outsidetemperature < roomTemperature && !windowOpen) {
+    //auto cooling between May (5) and September (10)
+    if (Time.month() >= 5 && Time.month() <= 10) {
+        if (roomTemperature > TOO_HOT && outsideTemperature < roomTemperature && !windowOpen) {
             return true;
         }
     }
@@ -124,17 +142,18 @@ int callShellysOpenClose(String command) {
     }
     if (errors < 2) {
         return 1;
-    } 
+    }
+    return 0;
 }
 
 bool doRequest(String command) {
     request.path = "/roller/0?go="+command;
-    Particle.publish("roller status", command, PRIVATE);
+    Particle.publish("roller status", command);
     http.get(request, response, headers);
     Serial.println(command);
     Serial.println(response.status);
     if (response.status != 200) {
-        Particle.publish("Shelly http status", String(response.status), PRIVATE);
+        Particle.publish("Shelly http status", String(response.status));
         errors++;
         return false;
     }
@@ -144,19 +163,28 @@ bool doRequest(String command) {
 void readMeasurements() {
     // Reading temperature or humidity takes about 250 milliseconds!
     // Sensor readings may also be up to 2 seconds 'old'
-	humidity = dht.getHumidity();
-	Particle.publish("humidity", String(humidity), PRIVATE);
-	logger("Humidity: %s%%", String(humidity));
-
-	roomTemperature = dht.getTempCelcius();
-	Particle.publish("roomTemperature", String(roomTemperature), PRIVATE);
-	logger("Temp: %s*C", String(roomTemperature));
-  
-    // Check if any reads failed and exit early (to try again).
-	if (isnan(humidity) || isnan(roomTemperature) ) {
-		Serial.println("Failed to read from DHT sensor!");
-		return;
-	}
+    
+    sensors_event_t event;
+    dht.temperature().getEvent(&event);
+    if (isnan(event.temperature)) {
+        Serial.println(F("Error reading temperature!"));
+    }
+    else {
+        roomTemperature = event.temperature;
+        Particle.publish("roomTemperature", String::format("%.1f", event.temperature));
+        logger("Temp: %s*C", String::format("%.1f", event.temperature));
+    }
+    // Get humidity event and print its value.
+    dht.humidity().getEvent(&event);
+    if (isnan(event.relative_humidity)) {
+        Serial.println(F("Error reading humidity!"));
+    }
+    else {
+        humidity = event.relative_humidity;
+    	Particle.publish("humidity", String::format("%.1f", event.relative_humidity));
+    	logger("Humidity: %s%%", String::format("%.1f", event.relative_humidity));
+    }
+    
 	lastTempRead = millis();
 }
 
