@@ -101,8 +101,8 @@ void loop() {
 }
 
 bool isTooHotAndSummer() {
-    //auto cooling between May (5) and September (10)
-    if (Time.month() >= 5 && Time.month() <= 10) {
+    //auto cooling between May (5) and September (9)
+    if (Time.month() >= 5 && Time.month() <= 9) {
         if (roomTemperature > TOO_HOT && outsideTemperature < roomTemperature && !windowOpen) {
             return true;
         }
