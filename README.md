@@ -1,4 +1,4 @@
-# particlePhoton
+# Window automation with particlePhoton
 
 Small smarthome project for my office and also a neighbor. Controls windows or rollers motors with shelly.cloud WLAN relays over a Particle.io Photon device. The photon tracks room temperature with a DHT22 sensor itself and receives meteo data over its API. Make sure you give the shellys a fixed IP address so you can code that address to the particle device.
 
